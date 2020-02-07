@@ -14,6 +14,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
+// Note Array for temporary Storage
+let array = [];
+
 // Routes
 // =============================================================
 
@@ -35,31 +38,24 @@ app.delete("/api/notes/:id", function(req, res) {
 
 // POST REQUEST
 app.post("/api/notes", function(req, res) {
-  return res.json(restaurant);
+  console.log(req.body);
+  let writeStream = fs.createWriteStream(__dirname + "/db/db.json");
+  array.push(req.body);
+  fs.writeFile(__dirname + "/db/db.json", JSON.stringify(array), err => {
+    if (err) throw err;
+  });
 });
 
 // GET REQUEST
 app.get("/api/notes", function(req, res) {
-  return res.json(tables);
+  return res.json(array);
 });
 
-// Reservation Table Storage
-const tables = [];
 
-
-// Create New Reservation - takes in JSON input
-app.post("/api/reserve", function(req, res) {
-  // req.body hosts is equal to the JSON post sent from the user
-  // This works because of our body parsing middleware
-  const newResy = req.body;
-
-  // Reduces available seats by the tablesize coerced to a number
-  restaurant.seats -= +newResy.size;
-
-  console.log(newResy);
-
-  tables.push(newResy);
-  res.json(tables);
+// Reads DB file for later modification
+fs.readFile(__dirname + "/db/db.json", (err, data) => {
+  array = JSON.parse(data);
+  console.log(array);
 });
 
 // Starts the server to begin listening
