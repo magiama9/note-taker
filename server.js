@@ -54,7 +54,7 @@ app.post("/api/notes", function(req, res) {
 
   // Assigns each note an id starting with 0.
   // Ids are rewritten each time a new note is added so they remain manageable
-  let id = 0;
+  let id = 1;
   array.forEach(idx => {
     idx.id = id;
     id++;
