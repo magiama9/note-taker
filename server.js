@@ -4,7 +4,6 @@ const fs = require("fs");
 const fsp = require("fs").promises;
 const express = require("express");
 const path = require("path");
-const util = require("util");
 
 // Sets up the Express App
 // =============================================================
