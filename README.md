@@ -12,7 +12,7 @@ This app was built as an exercise in back-end, server-side functionality. The go
 
 ## Technical
 
-Three HTTP methods are employed --- `GET, POST, and DELETE`. `/ and /api/notes` take `GET `requests. `/api/notes` also receives `POST` requests for new notes. `/api/notes/:id` receives `DELETE` requests for removing notes.
+Three HTTP methods are employed --- `GET, POST` and `DELETE`. `/` and `/api/notes` take `GET` requests. `/api/notes` also receives `POST` requests for new notes. `/api/notes/:id` receives `DELETE` requests for removing notes.
 
 Notes are dynamically assigned an ID value that updates when new notes are added to storage. The ID value is used to display the active/selected note as well as to delete notes.
 
