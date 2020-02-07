@@ -104,4 +104,4 @@ dist
 .tern-port
 
 # Instructions file
-instructions.md
+/instructions
