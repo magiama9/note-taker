@@ -44,10 +44,14 @@ app.post("/api/notes", function(req, res) {
   array.push(req.body);
   fs.writeFile(__dirname + "/db/db.json", JSON.stringify(array), err => {
     if (err) throw err;
+
+    // Return the new array of 
+    res.json(array);
   });
 });
 
 // GET REQUEST
+// N.B. THE ASYNC IS NOT REQUIRED. WAS FOR TESTING PURPOSES
 app.get("/api/notes", async (req, res) => {
   readMe(await res);
 });
@@ -64,6 +68,8 @@ app.listen(PORT, function() {
   console.log("App listening on PORT " + PORT);
 });
 
+
+// Reads the file when a get request is made
 const readMe = res => {
   fs.readFile(__dirname + "/db/db.json", async (err, data) => {
     array = await JSON.parse(data);
