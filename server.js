@@ -34,26 +34,46 @@ app.get("/notes", function(req, res) {
 
 // DELETE REQUEST
 app.delete("/api/notes/:id", function(req, res) {
-  console.log(req.params);
-  res.sendFile(path.join(__dirname, "index.html"));
+  let deleteID = req.params.id;
+
+  // Filters array to remove matching ID
+  array = array.filter(idx => {
+    return idx.id != deleteID;
+  });
+
+  // Returns the new array
+  res.json(array);
 });
 
 // POST REQUEST
 app.post("/api/notes", function(req, res) {
   console.log(req.body);
+  
+  // Pushes new note to the storage array
   array.push(req.body);
+
+  // Assigns each note an id starting with 0.
+  // Ids are rewritten each time a new note is added so they remain manageable
+  let id = 0;
+  array.forEach(idx => {
+    idx.id = id;
+    id++;
+  });
+
+  // Writes the new array to the DB file
+  // File is overwritten with the whole array
+  // TODO -- Use read and write streams to add smaller chunks of data instead of overwriting the whole file
   fs.writeFile(__dirname + "/db/db.json", JSON.stringify(array), err => {
     if (err) throw err;
 
-    // Return the new array of 
+    // Return the new array of notes
     res.json(array);
   });
 });
 
 // GET REQUEST
-// N.B. THE ASYNC IS NOT REQUIRED. WAS FOR TESTING PURPOSES
-app.get("/api/notes", async (req, res) => {
-  readMe(await res);
+app.get("/api/notes", (req, res) => {
+  res.json(array);
 });
 
 // Reads DB file for later modification
@@ -67,12 +87,3 @@ fs.readFile(__dirname + "/db/db.json", (err, data) => {
 app.listen(PORT, function() {
   console.log("App listening on PORT " + PORT);
 });
-
-
-// Reads the file when a get request is made
-const readMe = res => {
-  fs.readFile(__dirname + "/db/db.json", async (err, data) => {
-    array = await JSON.parse(data);
-    return res.json(array);
-  });
-};
