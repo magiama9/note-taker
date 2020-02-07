@@ -1,8 +1,10 @@
 // Dependencies
 // =============================================================
 const fs = require("fs");
+const fsp = require("fs").promises;
 const express = require("express");
 const path = require("path");
+const util = require("util");
 
 // Sets up the Express App
 // =============================================================
@@ -39,7 +41,6 @@ app.delete("/api/notes/:id", function(req, res) {
 // POST REQUEST
 app.post("/api/notes", function(req, res) {
   console.log(req.body);
-  let writeStream = fs.createWriteStream(__dirname + "/db/db.json");
   array.push(req.body);
   fs.writeFile(__dirname + "/db/db.json", JSON.stringify(array), err => {
     if (err) throw err;
@@ -47,10 +48,9 @@ app.post("/api/notes", function(req, res) {
 });
 
 // GET REQUEST
-app.get("/api/notes", function(req, res) {
-  return res.json(array);
+app.get("/api/notes", async (req, res) => {
+  readMe(await res);
 });
-
 
 // Reads DB file for later modification
 fs.readFile(__dirname + "/db/db.json", (err, data) => {
@@ -63,3 +63,10 @@ fs.readFile(__dirname + "/db/db.json", (err, data) => {
 app.listen(PORT, function() {
   console.log("App listening on PORT " + PORT);
 });
+
+const readMe = res => {
+  fs.readFile(__dirname + "/db/db.json", async (err, data) => {
+    array = await JSON.parse(data);
+    return res.json(array);
+  });
+};
