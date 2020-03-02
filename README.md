@@ -1,4 +1,4 @@
-# glowing-umbrella
+# note-taker
 
 Note Taking App built with Node and Express.
 
